@@ -4,10 +4,35 @@
 
 "https://jsonplaceholder.typicode.com/users - адреса куди робити запит"
 
-function fetchUsers() {
-  // Ваш код
-}
+const https = require('https');
 
-console.log(fetchUsers())
+function fetchUsers() {
+    return new Promise((success, failure) => {
+        const apiRequest = https.get('https://jsonplaceholder.typicode.com/users', (serverResponse) => {
+            let receivedData = '';
+
+            serverResponse.on('data', (dataFragment) => {
+                receivedData += dataFragment;
+            });
+
+            serverResponse.on('end', () => {
+                try {
+                    const allUserData = JSON.parse(receivedData);
+                    const simplifiedUsers = allUserData.map(person => ({
+                        id: person.id,
+                        name: person.name
+                    }));
+                    success(simplifiedUsers);
+                } catch (processError) {
+                    failure(new Error('Не вдалося обробити отримані дані: ' + processError.message));
+                }
+            });
+        });
+
+        apiRequest.on('error', (connectionError) => {
+            failure(new Error('Не вдалося отримати дані з сервера: ' + connectionError.message));
+        });
+    });
+}
 
 module.exports = fetchUsers;

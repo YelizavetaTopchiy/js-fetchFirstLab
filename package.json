@@ -1,7 +1,6 @@
 {
   "name": "js-fetchfirstlab",
   "version": "1.0.0",
-  "description": "",
   "main": "fetchInfo.js",
   "directories": {
     "test": "tests"
@@ -14,5 +13,6 @@
   "license": "ISC",
   "devDependencies": {
     "jest": "^29.7.0"
-  }
+  },
+  "description": ""
 }
